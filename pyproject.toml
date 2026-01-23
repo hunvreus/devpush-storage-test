@@ -1,0 +1,12 @@
+[project]
+name = "devpush-storage-test"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "flask==3.0.3",
+    "werkzeug==3.0.3",
+    "gunicorn",
+]
+
+[tool.uv]
+dev-dependencies = []

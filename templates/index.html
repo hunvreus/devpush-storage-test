@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <script>
+    if (matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
+  </script>
+  <meta charset="utf-8" />
+  <title>Storage Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.10/dist/basecoat.cdn.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.10/dist/js/all.min.js" defer></script>
+</head>
+<body class="p-4 sm:p-6">
+  <div class="max-w-screen-sm mx-auto">
+    <div class="card">
+      <header>
+        <h2>Storage test</h2>
+        <p>This is a test application to verify that the database and volume storage are working correctly. SQLite path (<code>DB_PATH</code>) is <code>{{ db_path | e }}</code> and upload directory (<code>UPLOAD_DIR</code>) is <code>{{ upload_dir | e }}</code>.</p>
+      </header>
+      <section class="space-y-6">
+        <form action="/items" method="post" enctype="multipart/form-data" class="form space-y-6">
+          <div class="space-y-3">
+            <label for="title">Title</label>
+            <input id="title" name="title" type="text" required />
+          </div>
+          <div class="space-y-3">
+            <label for="note">Note</label>
+            <textarea id="note" name="note" rows="3"></textarea>
+          </div>
+          <div class="space-y-3">
+            <label for="image">Image</label>
+            <input id="image" name="image" type="file" accept="image/*" />
+          </div>
+          <footer class="flex justify-end">
+            <button type="submit" class="btn">Save</button>
+          </footer>
+        </form>
+        <hr>
+        {% if rows %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Note</th>
+                <th>Created</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            {% for row in rows %}
+              <tr class="h-12">
+                <td>
+                  <span class="badge-secondary font-mono">#{{ row.id }}</span>
+                </td>
+                <td>{{ row.title }}</td>
+                <td class="truncate w-full max-w-1">
+                  <span class="truncate">{{ row.note }}</span>
+                </td>
+                <td>{{ row.created_at | datefmt }}</td>
+                <td>
+                  {% if row.image_path %}
+                    <img
+                      src="/uploads/{{ row.image_path | e }}" alt="{{ row.title | e }}"
+                      class="object-cover shrink-0 size-6 rounded"
+                    />
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+          <div class="flex items-center justify-center min-h-24">
+            <span class="badge-secondary">No items yet.</span>
+          </div>
+        {% endif %}
+      </section>
+    </div>
+    
+  </div>
+</body>
+</html>
